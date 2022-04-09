@@ -1,8 +1,7 @@
 {
-    "esversion": 6,
-    "browser": true,
-    "strict": "global",
-    "node": true,
-    "devel": true,
-    "globals": { "JS + React": true }
+  "esversion": 6,
+  "browser": true,
+  "node": true,
+  "devel": true,
+  "strict": "global"
 }
