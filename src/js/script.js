@@ -95,19 +95,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Modal window
 
-  const modalTrigger = document.querySelector("[data-modal]"),
+  const modalTrigger = document.querySelectorAll("[data-modal]"),
     modal = document.querySelector(".modal"),
     modalClose = document.querySelector("[data-close]");
 
-  modalTrigger.addEventListener("click", () => {
-    modal.classList.add('show');
-    modal.classList.remove("hide");
-    document.body.style.overflow = 'hidden';
+  modalTrigger.forEach(btn => {
+    btn.addEventListener("click", () => {
+      modal.classList.add('show');
+      modal.classList.remove('hide');
+      document.body.style.overflow = 'hidden';
+    });
   });
 
-  modalClose.addEventListener("click", () => {
-    modal.classList.remove('show');
-    modal.classList.add('hide');
+  function closeModal(trigger) {
+    trigger.classList.add('hide');
+    trigger.classList.remove('show');
     document.body.style.overflow = '';
+  }
+
+  modalClose.addEventListener("click", closeModal);
+
+  modal.addEventListener('click', (e) => {
+    if (modal.classList.contains('show') && e.target === modal) {
+      closeModal(modal);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && modal.classList.contains('show')) {
+      closeModal(modal);
+    }
   });
 });
