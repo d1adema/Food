@@ -1,7 +1,6 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
     // tabs
-
     const tabs = document.querySelectorAll(".tabheader__item"),
         tabsContent = document.querySelectorAll(".tabcontent"),
         tabsParent = document.querySelector(".tabheader__items");
@@ -161,12 +160,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Classes for cards
 
     class MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector) {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.descr = descr;
             this.price = price;
+            this.classes = classes;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 2.72;
             this.changeToRUB();
@@ -178,21 +178,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         render() {
             const element = document.createElement('div');
+
+            if (this.classes.length === 0) {
+              this.element = 'menu__item';
+              element.classList.add(this.element);
+            } else {
+              this.classes.forEach(className => element.classList.add(className));
+            }
+
             element.innerHTML = `
-               <div class="menu__item">
-                <img src=${this.src} alt=${this.alt} />
-                <h3 class="menu__item-subtitle">${this.title}</h3>
-                <div class="menu__item-descr">
-                  ${this.descr}
-                </div>
-                <div class="menu__item-divider"></div>
-                <div class="menu__item-price">
-                  <div class="menu__item-cost">Цена:</div>
-                  <div class="menu__item-total">
-                    <span>${this.price}</span> руб/день
-                  </div>
-                </div>
-              </div>
+               <img src=${this.src} alt=${this.alt} />
+               <h3 class="menu__item-subtitle">${this.title}</h3>
+               <div class="menu__item-descr">
+                 ${this.descr}
+               </div>
+             <div class="menu__item-divider"></div>
+               <div class="menu__item-price">
+                 <div class="menu__item-cost">Цена:</div>
+                 <div class="menu__item-total">
+                   <span>${this.price}</span> руб/день
+                 </div>
+               </div>
+             </div>
             `;
             this.parent.append(element);
         }
@@ -207,7 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
         'блюд. Красная рыба, морепродукты, фрукты -\n' +
         'ресторанное меню без похода в ресторан!',
         550,
-        '.menu .container'
+        '.menu .container',
+        'menu__item'
     ).render();
 
   new MenuCard(
@@ -220,7 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
       'кокоса или гречки, правильное количество белков за\n' +
       'счет тофу и импортных вегетарианских стейков.',
       430,
-      '.menu .container'
+      '.menu .container',
+      'menu__item'
   ).render();
 
   new MenuCard(
@@ -232,6 +241,59 @@ document.addEventListener("DOMContentLoaded", () => {
       'активных и здоровых людей. Это абсолютно новый\n' +
       'продукт с оптимальной ценой и высоким качеством!',
       229,
-      '.menu .container'
+      '.menu .container',
+      'menu__item'
   ).render();
+
+  // Form
+
+  const forms = document.querySelectorAll('form');
+
+  const message = {
+    loading: 'Loading...',
+    success: 'Success!',
+    failure: 'Fail :/'
+  };
+
+  forms.forEach((item) => {
+    postData(item);
+  });
+
+  function postData(form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const messageRequest = document.createElement('div');
+    messageRequest.classList.add('status');
+    messageRequest.textContent = message.loading;
+    form.append(messageRequest);
+
+    const request = new XMLHttpRequest();
+    request.open("POST", "server.php");
+    request.setRequestHeader("Content-type", "application/json");
+
+    const formData = new FormData(form);
+    const obj = {};
+
+    formData.forEach(function (value, key) {
+      obj[key] = value;
+    });
+
+    const jsonObj = JSON.stringify(obj);
+    request.send(jsonObj);
+
+    request.addEventListener('load', () => {
+      if (request.status === 200) {
+        console.log(request.response);
+        messageRequest.textContent = message.success;
+        form.reset();
+        setTimeout(() => {
+          messageRequest.remove();
+        }, 2000);
+      } else {
+        messageRequest.textContent = messageRequest.failure;
+      }
+    });
+  });
+  }
 });
