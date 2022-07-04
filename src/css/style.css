@@ -261,6 +261,12 @@ a {
   align-items: center;
   font-size: 24px;
   color: rgba(0, 0, 0, 0.5);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .offer__slider-wrapper {
   width: 100%;
@@ -270,10 +276,22 @@ a {
 .offer__slider-prev {
   margin-right: 10px;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .offer__slider-next {
   margin-left: 10px;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .offer__slider #current {
   font-size: 48px;
@@ -283,11 +301,14 @@ a {
 .offer__slide {
   width: 100%;
   height: 390px;
+  display: none;
+  transition: 300ms;
 }
 .offer__slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: 300ms;
 }
 .calculating {
   padding: 50px 0;

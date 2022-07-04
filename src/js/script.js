@@ -320,6 +320,44 @@ document.addEventListener("DOMContentLoaded", () => {
       closeModal();
     }, 4000);
   }
+
+  // slider
+  const slides = document.querySelectorAll(".offer__slide"),
+    prev = document.querySelector(".offer__slider-prev"),
+    next = document.querySelector(".offer__slider-next"),
+    current = document.querySelector("#current");
+  let slideIndex = 1;
+
+  function showSlide(i) {
+    if (i > slides.length) {
+      slideIndex = 1;
+    } else if (i < 1) {
+      slideIndex = 4;
+    }
+    slides.forEach((item) => {
+      item.style = "display: none";
+    });
+
+    slides[slideIndex - 1].style = "display: block";
+
+    if (slides.length <= 4) {
+      current.textContent = `0${slideIndex}`;
+    }
+  }
+
+  function plusSlides(i) {
+    showSlide((slideIndex += i));
+  }
+
+  prev.addEventListener("click", () => {
+    plusSlides(-1);
+  });
+
+  next.addEventListener("click", () => {
+    plusSlides(1);
+  });
+
+  showSlide(slideIndex);
 });
 
 const requestURL = "http://localhost:3000/menu";
