@@ -634,3 +634,9 @@ a {
   width: 280px;
   margin: 0 auto;
 }
+
+.offer__slide-inner {
+  display: flex;
+  overflow: hidden;
+  transition: 500ms all ease-in;
+}

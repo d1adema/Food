@@ -323,41 +323,77 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // slider
   const slides = document.querySelectorAll(".offer__slide"),
-    prev = document.querySelector(".offer__slider-prev"),
-    next = document.querySelector(".offer__slider-next"),
-    current = document.querySelector("#current");
-  let slideIndex = 1;
+      prev = document.querySelector(".offer__slider-prev"),
+      next = document.querySelector(".offer__slider-next"),
+      total = document.querySelector('#total'),
+      current = document.querySelector("#current"),
+      slidesField = document.querySelector('.offer__slide-inner'),
+      slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+      sliderWidth = window.getComputedStyle(slidesWrapper).width;
 
-  function showSlide(i) {
-    if (i > slides.length) {
+  let slideIndex = 1,
+      offset = 0; // Offset from i0
+
+  if (slides.length < 10) {
+    total.textContent = `0${slides.length}`;
+    current.textContent = `0${slideIndex}`;
+  } else {
+    total.textContent = slides.length;
+    current.textContent = `0${slideIndex}`;
+  }
+
+  slidesField.style.width = slides.length * 100 + '%';
+
+  slides.forEach(slide => {
+    slide.style.width = sliderWidth;
+  });
+
+  next.addEventListener('click', () => {
+    const calcWidth = +sliderWidth.slice(0, sliderWidth.length - 2);
+
+    if (offset === calcWidth * (slides.length - 1)) { // Ex: 1950 = 650 * (4 - 1)
+      offset = 0;
+    } else {
+      offset += calcWidth;
+    }
+
+    slidesField.style.transform = `translateX(-${offset}px)`;
+
+    if (slideIndex === slides.length) {
       slideIndex = 1;
-    } else if (i < 1) {
-      slideIndex = 4;
+    } else {
+      slideIndex++;
     }
-    slides.forEach((item) => {
-      item.style = "display: none";
-    });
 
-    slides[slideIndex - 1].style = "display: block";
-
-    if (slides.length <= 4) {
+    if (slides.length < 10) {
       current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
     }
-  }
-
-  function plusSlides(i) {
-    showSlide((slideIndex += i));
-  }
-
-  prev.addEventListener("click", () => {
-    plusSlides(-1);
   });
 
-  next.addEventListener("click", () => {
-    plusSlides(1);
+  prev.addEventListener('click', () => {
+    const calcWidth = +sliderWidth.slice(0, sliderWidth.length - 2);
+
+    if (offset === 0) {
+      offset = calcWidth * (slides.length - 1);
+    } else {
+      offset -= calcWidth;
+    }
+
+    if (slideIndex === 1) {
+      slideIndex = slides.length;
+    } else {
+      slideIndex--;
+    }
+
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
   });
 
-  showSlide(slideIndex);
 });
 
 const requestURL = "http://localhost:3000/menu";
